@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working with API's</title>
+</head>
+<body>
+    <div>
+        <div>
+            <h3>Language</h3>
+                <label>
+                    <select name="top5" id="lang">
+                    <option>en</option>
+                    <option>de</option>
+                    <option>fr</option>
+                    </select>
+                </label>
+        </div>
+
+        <div>
+            <h3>Amount of jokes:</h3>
+            <input type="number" id="amount">
+        </div>
+
+        <button onclick=getJoke()>Joke</button>
+        <button onclick=deleteJokes()>delete</button>
+        <h2 id="para"></h2>
+        <h2 id="delivery"></h2>
+    </div>
+
+</body>
+
+<script>
+    let url = "https://v2.jokeapi.dev/joke/Any?format=json"
+    console.log(document.querySelector("#lang").value);
+    let lang = document.querySelector("#lang").value;
+
+    
+    let amount = 0;
+
+
+    
+    
+    async function getJoke() {
+        let amountSelected = document.querySelector("#amount").value;
+        let lang = document.querySelector("#lang").value;
+        url = url + "&lang=" + document.querySelector("#lang").value;
+            while (amount < amountSelected){
+                console.log(amount);
+                let response = await fetch(url);
+                let json = await response.json();
+                    if (!json.error) {
+                        if (json.type == "twopart") {   
+                            console.log(url);
+                            console.log(json);
+                            document.querySelector("#para").innerHTML +=  "Joke:" + json.setup + " Answer: " + json.delivery +     "<br>";
+                        }
+                        else {
+                            console.log(json);
+                            document.querySelector("#para").innerHTML += "Joke: " + json.joke + "<br>";
+                            document.querySelector("#delivery").innerHTML += "";
+                        }
+                        amount = amount +1;
+                        console.log(amount);
+                    } else {
+                        alert("Error pls lower your amount of Jokes. API is not that fast.");
+                        console.log(json);
+                        amount = 0;
+                        return;
+                    }
+            }
+            amount = 0;
+    }   
+
+    function deleteJokes() {
+        document.querySelector("#para").innerHTML = "";
+        document.querySelector("#delivery").innerHTML = "";
+        console.log("Franz");
+    }
+
+
+</script>
+
+<style>
+    .checkbox {
+    display: flex;
+    justify-content: center;
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+</html>
